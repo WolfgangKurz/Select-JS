@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.8
+ * Version: 1.0.9
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license

@@ -18,6 +18,7 @@ ClassName | Description
 --------- | -----------
 select-js-inline | Droplist will not fit size to parent element.
 select-js-up | Droplist will show to Up.
+select-js-scroll | Droplist will show vertical scroll always.
 select-js-noscroll | Droplist will hide vertical scroll.
 
 

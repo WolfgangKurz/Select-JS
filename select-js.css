@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.8
+ * Version: 1.0.9
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -37,12 +37,14 @@
 	pointer-events: none;
 }
 .select-js .select-js-display {
-	padding: 2px 24px 2px 4px;
-	height: 1.72em;
-	line-height: 1.5em;
+	padding: 2px 28px 2px 8px;
+	height: 100%;
+	min-height: 1.72em;
+	line-height: 150%;
 	width: 100%;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	text-align: left;
 	overflow: hidden;
 }
 .select-js .select-js-optlist {
@@ -55,8 +57,9 @@
 	border: 1px solid #573896;
 	border-radius: 0 0 3px 3px;
 	background-color: #fff;
+	text-align: left;
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 	z-index: 19424;
 }
 .select-js.select-js-inline .select-js-optlist {
@@ -76,7 +79,8 @@
 .select-js .select-js-optlist .select-js-option:hover { background-color: #e8e8e8 }
 .select-js .select-js-optlist .select-js-option:last-child { border-bottom: 0 }
 
-.select-js.select-js-noscroll .select-js-optlist { overflow-y: auto }
+.select-js.select-js-scroll .select-js-optlist { overflow-y: scroll }
+.select-js.select-js-noscroll .select-js-optlist { overflow-y: hidden }
 
 .select-js.select-js-up.select-js-inline .select-js-optlist { border-radius: 3px 3px 3px 0 }
 .select-js.select-js-up .select-js-optlist {
