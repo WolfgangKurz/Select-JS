@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.9
+ * Version: 1.0.10
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -40,17 +40,36 @@
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
+		var editable = false;
+		{
+			var clnm = " "+target.className+" ";
+			editable = clnm.indexOf(" select-js-editable ")>=0;
+		}
+
 		var prev = target.parentNode;
 		if( (" "+prev.className+" ").indexOf(" select-js ")<0 ) prev = null;
 		else prev.parentNode.insertBefore(target, prev);
 
 		var wrapper = document.createElement("div");
-		var display = document.createElement("div");
 		var opts = document.createElement("div");
+		var display;
 
-		var toggle = function(){
+		if(editable) {
+			display = document.createElement("input");
+			if(target.name.length>0) display.name = target.name;
+			if(target.id.length>0) display.id = target.id;
+			if(target.className.length>0) display.className += " "+target.className;
+		} else {
+			display = document.createElement("div");
+		}
+
+		var toggle = function(open){
 			var clnm = " "+wrapper.className+" ";
-			if( clnm.indexOf(" dropdown ")<0 ) clnm += " dropdown";
+
+			if(typeof open=="undefined")
+				open = clnm.indexOf(" dropdown ")<0;
+
+			if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
 			else clnm = clnm.replace(" dropdown ", " ");
 
 			while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
@@ -72,7 +91,7 @@
 			var current = opts.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
 			if(current!=null){
 				current.className += " selected";
-				display.innerHTML = current.innerHTML;
+				if(!editable) display.innerHTML = current.innerHTML;
 			}
 		};
 
@@ -134,11 +153,18 @@
 			opts.appendChild( opt );
 		}
 
-		display.onclick = function(){ toggle() };
+		display.onclick = function(){
+			if(!editable) toggle();
+			else toggle(true);
+		};
 		update();
 
-		target.style.display = "none";
 		target.parentNode.insertBefore(wrapper, target);
+		if(editable) {
+			target.parentNode.removeChild(target);
+			target = display;
+		}
+		else target.style.display = "none";
 
 		wrapper.appendChild(target);
 		wrapper.appendChild(display);

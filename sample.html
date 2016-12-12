@@ -338,15 +338,29 @@ a:hover {
 				</optgroup>
 			</select>
 		</div>
+
+		<br><br>
+
+		<div class="sector">
+			<code>select-js-editable</code>
+			<h2>Editable</h2>
+
+			<select class="text-md input-hg select-js-editable" id="sample06">
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
 	</div>
 
 <script type="text/javascript">
 "use strict";
-document.querySelector("#sample01").selectjs();
-document.querySelector("#sample02").selectjs();
-document.querySelector("#sample03").selectjs();
-document.querySelector("#sample04").selectjs();
-document.querySelector("#sample05").selectjs();
+var select = document.querySelectorAll("select");
+for(var i in select)
+	if(select[i] instanceof HTMLElement)
+		select[i].selectjs();
 </script>
 </body>
 </html>
