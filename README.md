@@ -22,6 +22,13 @@ select-js-scroll | Droplist will show vertical scroll always.
 select-js-noscroll | Droplist will hide vertical scroll.
 select-js-editable | Droplist will be changed to text input element. Caution! Cannot back to select element.
 
+On `select-js-editable`, you can use some attributes for design.
+
+Attributes | Description
+--------- | -----------
+value | Set default value of editable select.
+placeholder | Set placeholder of editable select.
+
 
 ## Customize
 In original Select.JS code, it has Blue accent color.

@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.10
+ * Version: 1.0.11
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -59,6 +59,7 @@
 			if(target.name.length>0) display.name = target.name;
 			if(target.id.length>0) display.id = target.id;
 			if(target.className.length>0) display.className += " "+target.className;
+			if(target.getAttribute("placeholder")!=null) display.placeholder = target.getAttribute("placeholder");
 		} else {
 			display = document.createElement("div");
 		}
@@ -161,6 +162,8 @@
 
 		target.parentNode.insertBefore(wrapper, target);
 		if(editable) {
+			display.value = target.getAttribute("value");
+
 			target.parentNode.removeChild(target);
 			target = display;
 		}

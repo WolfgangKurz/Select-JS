@@ -1,11 +1,12 @@
 <!doctype html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Select.JS Example</title>
+<meta charset="UTF-8">
+<title>Select.JS Example</title>
 
-	<link rel="stylesheet" type="text/css" href="select-js.css">
-	<script type="text/javascript" src="select-js.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light">
+<link rel="stylesheet" type="text/css" href="select-js.css">
+<script type="text/javascript" src="select-js.js"></script>
 
 <style type="text/css">
 * { box-sizing: border-box }
@@ -25,12 +26,21 @@ a:hover {
 	border-bottom: 1px solid #343434;
 	color: #343434;
 }
+p { margin: 4px 0 }
+hr {
+	margin: 20px 8px;
+	height: 1px;
+	border: none;
+	background-color: #d7d7e5;
+}
+
 .sector {
 	display: inline-block;
 	width: 320px;
 	margin: 6px;
 	padding: 16px;
-	border: 1px solid #e4e4e4;
+	border: 1px solid #d7d7d7;
+	vertical-align: top;
 	text-align: left;
 }
 .sector code {
@@ -47,13 +57,14 @@ a:hover {
 	display: table;
 	clear: both;
 }
-
 .text-md { font-size: 14px }
 .input-hg { min-width: 200px }
 </style>
 </head>
 <body>
-	<h1>Select.JS Example</h1>
+	<h1>
+		Select.JS<sup>1.0.11</sup> Example
+	</h1>
 	<a href="https://github.com/WolfgangKurz/Select-JS" target="_blank">Github Project</a>
 
 	<div style="padding:20px 0">
@@ -61,10 +72,12 @@ a:hover {
 		<p>Released under the MIT license</p>
 	</div>
 
+		<hr>
+
 	<div>
 		<div class="sector">
 			<h2>No-Options</h2>
-			<select class="text-md input-hg" id="sample01">
+			<select class="text-md input-hg" id="sample_default">
 				<optgroup label="Common">
 					<option value="bounce">Bounce</option>
 					<option value="flash">Flash</option>
@@ -130,7 +143,7 @@ a:hover {
 			<code>select-js-inline</code>
 			<h2>Inline size droplist</h2>
 
-			<select class="text-md input-hg select-js-inline" id="sample02">
+			<select class="text-md input-hg select-js-inline" id="sample_inline">
 				<optgroup label="Common">
 					<option value="bounce">Bounce</option>
 					<option value="flash">Flash</option>
@@ -192,13 +205,11 @@ a:hover {
 				</optgroup>
 			</select>
 		</div>
-		<br>
-
 		<div class="sector">
 			<code>select-js-up</code>
 			<h2>Up direction droplist</h2>
 
-			<select class="text-md input-hg select-js-up" id="sample03">
+			<select class="text-md input-hg select-js-up" id="sample_uplist">
 				<optgroup label="Common">
 					<option value="bounce">Bounce</option>
 					<option value="flash">Flash</option>
@@ -264,7 +275,7 @@ a:hover {
 			<code>select-js-noscroll</code>
 			<h2>No scroll</h2>
 
-			<select class="text-md input-hg select-js-noscroll" id="sample04">
+			<select class="text-md input-hg select-js-noscroll" id="sample_noscroll">
 				<optgroup label="Common">
 					<option value="bounce">Bounce</option>
 					<option value="flash">Flash</option>
@@ -330,7 +341,7 @@ a:hover {
 			<code>select-js-scroll</code>
 			<h2>Force scroll</h2>
 
-			<select class="text-md input-hg select-js-scroll" id="sample05">
+			<select class="text-md input-hg select-js-scroll" id="sample_forcescroll">
 				<optgroup label="Flippers">
 					<option value="flip">Flip</option>
 					<option value="flipInX">Flip In X</option>
@@ -339,13 +350,37 @@ a:hover {
 			</select>
 		</div>
 
-		<br><br>
+		<hr>
 
 		<div class="sector">
 			<code>select-js-editable</code>
 			<h2>Editable</h2>
 
-			<select class="text-md input-hg select-js-editable" id="sample06">
+			<select class="text-md input-hg select-js-editable" id="sample_editable">
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
+		<div class="sector">
+			<code>select-js-editable</code>
+			<h2>Editable (default value)</h2>
+
+			<select class="text-md input-hg select-js-editable" id="sample_editable_defaultvalue" value="Default value">
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
+		<div class="sector">
+			<code>select-js-editable</code>
+			<h2>Editable (placeholder)</h2>
+
+			<select class="text-md input-hg select-js-editable" id="sample_placeholder" placeholder="Placeholder">
 				<optgroup label="Flippers">
 					<option value="flip">Flip</option>
 					<option value="flipInX">Flip In X</option>
