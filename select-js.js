@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.11
+ * Version: 1.0.12
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -77,7 +77,8 @@
 			wrapper.className = clnm.trim();
 
 			var current = opts.querySelector(".select-js-option.selected");
-			opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
+			if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
+			else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
 		};
 		var update = function(){
 			var all = opts.querySelectorAll(".select-js-option.selected");
