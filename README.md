@@ -21,6 +21,7 @@ select-js-up | Droplist will show to Up.
 select-js-scroll | Droplist will show vertical scroll always.
 select-js-noscroll | Droplist will hide vertical scroll.
 select-js-editable | Droplist will be changed to text input element. Caution! Cannot back to select element.
+select-js-autofilter | Options will be filtered automatically by input value. `Editable only.`
 
 On `select-js-editable`, you can use some attributes for design.
 

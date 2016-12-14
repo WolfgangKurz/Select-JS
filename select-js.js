@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.12
+ * Version: 1.0.13
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -31,7 +31,7 @@
 				clnm = clnm.replace(" dropdown ", " ");
 
 				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				selects[i].className = clnm;
+				selects[i].className = clnm.trim();
 			}
 		});
 	};
@@ -40,10 +40,11 @@
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
-		var editable = false;
+		var editable = false, is_autofilter = false;
 		{
 			var clnm = " "+target.className+" ";
 			editable = clnm.indexOf(" select-js-editable ")>=0;
+			is_autofilter = clnm.indexOf(" select-js-autofilter ")>=0;
 		}
 
 		var prev = target.parentNode;
@@ -77,8 +78,10 @@
 			wrapper.className = clnm.trim();
 
 			var current = opts.querySelector(".select-js-option.selected");
-			if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
-			else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
+			if(current!=null){
+				if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
+				else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
+			}
 		};
 		var update = function(){
 			var all = opts.querySelectorAll(".select-js-option.selected");
@@ -87,7 +90,37 @@
 				clnm = clnm.replace(" selected ", " ");
 
 				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				all[i].className = clnm;
+				all[i].className = clnm.trim();
+			}
+
+			if(is_autofilter){
+				all = opts.querySelectorAll(".select-js-option");
+				for(var i=0; i<all.length; i++){
+					var clnm = " "+all[i].className+" ";
+					clnm = clnm.replace(" select-js-filtered ", " ");
+
+					if(target.value.length==0 || all[i].innerHTML.indexOf(target.value)>=0)
+						clnm += " select-js-filtered";
+
+					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+					all[i].className = clnm.trim();
+				}
+
+				all = opts.querySelectorAll(".select-js-optgroup");
+				for(var i=0; i<all.length; i++){
+					var clnm = " "+all[i].className+" ";
+					clnm = clnm.replace(" select-js-filteredless ", " ");
+
+					var selector =
+						".select-js-option.select-js-filtered"
+						+ "[select-js-optgroup=\""+all[i].getAttribute("select-js-optgroup")+"\"]";
+
+					if(opts.querySelectorAll(selector).length==0)
+						clnm += " select-js-filteredless";
+
+					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+					all[i].className = clnm.trim();
+				}
 			}
 
 			var current = opts.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
@@ -109,7 +142,7 @@
 				opt.className = ("select-js-option " + ops[i].className).trim();
 				opt.innerHTML = ops[i].innerHTML;
 				opt.setAttribute("data-value", ops[i].value);
-				opt.onclick = function(){
+				opt.addEventListener("click", function(){
 					target.value = this.getAttribute("data-value");
 
 					if(document.createEventObject) {
@@ -122,10 +155,12 @@
 
 					update();
 					toggle();
-				};
+				});
 			}else{
+				var grpId = Math.random().toFixed(6).substr(2);
 				opt.innerHTML = ops[i].label;
 				opt.className = "select-js-optgroup";
+				opt.setAttribute("select-js-optgroup", "grp"+grpId);
 				opts.appendChild( opt );
 
 				var ops2 = ops[i].querySelectorAll("option");
@@ -135,7 +170,8 @@
 					opt.className = ("select-js-option select-js-indent " + ops2[j].className).trim();
 					opt.innerHTML = ops2[j].innerHTML;
 					opt.setAttribute("data-value", ops2[j].value);
-					opt.onclick = function(){
+					opt.setAttribute("select-js-optgroup", "grp"+grpId);
+					opt.addEventListener("click", function(){
 						target.value = this.getAttribute("data-value");
 
 						if(document.createEventObject) {
@@ -148,18 +184,21 @@
 
 						update();
 						toggle();
-					};
+					});
 					opts.appendChild( opt );
 				}
 			}
 			opts.appendChild( opt );
 		}
 
-		display.onclick = function(){
+		display.addEventListener("click", function(){
 			if(!editable) toggle();
 			else toggle(true);
-		};
-		update();
+		});
+		if(editable) {
+			display.addEventListener("change", update);
+			display.addEventListener("keyup", update);
+		}
 
 		target.parentNode.insertBefore(wrapper, target);
 		if(editable) {
@@ -169,6 +208,8 @@
 			target = display;
 		}
 		else target.style.display = "none";
+
+		update();
 
 		wrapper.appendChild(target);
 		wrapper.appendChild(display);

@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.12
+ * Version: 1.0.13
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -74,6 +74,7 @@
 	border-radius: 0 3px 3px 3px;
 }
 .select-js .select-js-optlist .select-js-option, .select-js .select-js-optlist .select-js-optgroup {
+	display: block;
 	padding: 4px 10px 4px 6px;
 	border-bottom: 1px solid #dcdcdc;
 }
@@ -120,3 +121,7 @@
 
 .select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: unset }
 .select-js.select-js-editable .select-js-optlist .select-js-option:hover { background-color: #e8e8e8 }
+
+.select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option { display: none }
+.select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
+.select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-optgroup.select-js-filteredless { display: none }
