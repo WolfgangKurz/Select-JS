@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.13
+ * Version: 1.0.14
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -125,3 +125,7 @@
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option { display: none }
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-optgroup.select-js-filteredless { display: none }
+
+.select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option { display: none }
+.select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
+.select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-optgroup.select-js-filteredless { display: none }

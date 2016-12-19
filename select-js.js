@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.13
+ * Version: 1.0.14
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -36,15 +36,22 @@
 		});
 	};
 
-	HTMLElement.prototype.selectjs = function(){
+	HTMLElement.prototype.selectjs = function(params){
+		var paramlist = {};
+		if(typeof params!="undefined"){
+			for(var i in params)
+				paramlist[i] = params[i];
+		}
+
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
-		var editable = false, is_autofilter = false;
+		var editable = false, is_autofilter = false, is_customfilter = false;
 		{
 			var clnm = " "+target.className+" ";
 			editable = clnm.indexOf(" select-js-editable ")>=0;
 			is_autofilter = clnm.indexOf(" select-js-autofilter ")>=0;
+			is_customfilter = clnm.indexOf(" select-js-customfilter ")>=0;
 		}
 
 		var prev = target.parentNode;
@@ -93,7 +100,62 @@
 				all[i].className = clnm.trim();
 			}
 
-			if(is_autofilter){
+			if(is_customfilter && "customfilter" in paramlist){
+				all = opts.querySelectorAll(".select-js-option.select-js-customopt");
+				for(var i=0; i<all.length; i++) all[i].parentNode.removeChild( all[i] );
+
+				all = opts.querySelectorAll(".select-js-option");
+				for(var i=0; i<all.length; i++){
+					var clnm = " "+all[i].className+" ";
+					clnm = clnm.replace(" select-js-filtered ", " ");
+
+					if(target.value.length==0 || all[i].innerHTML.indexOf(target.value)>=0)
+						clnm += " select-js-filtered";
+
+					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+					all[i].className = clnm.trim();
+				}
+
+				all = opts.querySelectorAll(".select-js-option");
+				all = paramlist["customfilter"](target.value, all);
+				for(var i=0; i<all.length; i++){
+					var opt = document.createElement("div");
+					opt.className = "select-js-option select-js-filtered select-js-customopt";
+					opt.innerHTML = all[i].display;
+					opt.setAttribute("data-value", all[i].value);
+					opt.addEventListener("click", function(){
+						target.value = this.getAttribute("data-value");
+
+						if(document.createEventObject) {
+							target.fireEvent("onchange");
+						} else {
+							var evt = document.createEvent("HTMLEvents");
+							evt.initEvent("change", false, true);
+							target.dispatchEvent(evt);
+						}
+
+						update();
+						toggle();
+					});
+					opts.appendChild(opt);
+				}
+
+				all = opts.querySelectorAll(".select-js-optgroup");
+				for(var i=0; i<all.length; i++){
+					var clnm = " "+all[i].className+" ";
+					clnm = clnm.replace(" select-js-filteredless ", " ");
+
+					var selector =
+						".select-js-option.select-js-filtered"
+						+ "[select-js-optgroup=\""+all[i].getAttribute("select-js-optgroup")+"\"]";
+
+					if(opts.querySelectorAll(selector).length==0)
+						clnm += " select-js-filteredless";
+
+					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+					all[i].className = clnm.trim();
+				}
+			}else if(is_autofilter){
 				all = opts.querySelectorAll(".select-js-option");
 				for(var i=0; i<all.length; i++){
 					var clnm = " "+all[i].className+" ";

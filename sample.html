@@ -63,7 +63,7 @@ hr {
 </head>
 <body>
 	<h1>
-		Select.JS<sup>1.0.13</sup> Example
+		Select.JS<sup>1.0.14</sup> Example
 	</h1>
 	<a href="https://github.com/WolfgangKurz/Select-JS" target="_blank">Github Project</a>
 
@@ -454,14 +454,47 @@ hr {
 				</optgroup>
 			</select>
 		</div>
+		<div class="sector">
+			<code>select-js-editable select-js-customfilter</code>
+			<h2>Editable with Custom-filter</h2>
+
+			<select class="text-md input-hg select-js-editable select-js-customfilter" id="sample_editable_customfilter">
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
 	</div>
 
 <script type="text/javascript">
 "use strict";
-var select = document.querySelectorAll("select");
+var select;
+
+select = document.querySelectorAll("select:not(.select-js-customfilter)");
 for(var i in select)
 	if(select[i] instanceof HTMLElement)
 		select[i].selectjs();
+
+
+select = document.querySelectorAll("select.select-js-customfilter");
+for(var i in select)
+	if(select[i] instanceof HTMLElement)
+		select[i].selectjs({
+			customfilter: function(value, list){
+				var data = [];
+				for(var i=0; i<10; i++)
+					data.push(
+						{
+							"display": value + " " + Math.random().toFixed(4),
+							"value": value + " " + Math.random().toFixed(4)
+						}
+					);
+
+				return data;
+			}
+		});
 </script>
 </body>
 </html>
