@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.14
+ * Version: 1.0.15
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -64,6 +64,7 @@
 
 		if(editable) {
 			display = document.createElement("input");
+			display.autocomplete = "off";
 			if(target.name.length>0) display.name = target.name;
 			if(target.id.length>0) display.id = target.id;
 			if(target.className.length>0) display.className += " "+target.className;
@@ -90,7 +91,9 @@
 				else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
 			}
 		};
-		var update = function(){
+		var update = function(lazyfilter){
+			if(typeof lazyfilter=="undefined") lazyfilter = null;
+
 			var all = opts.querySelectorAll(".select-js-option.selected");
 			for(var i=0; i<all.length; i++){
 				var clnm = " "+all[i].className+" ";
@@ -100,7 +103,7 @@
 				all[i].className = clnm.trim();
 			}
 
-			if(is_customfilter && "customfilter" in paramlist){
+			if(is_customfilter && (lazyfilter!=null || "customfilter" in paramlist)){
 				all = opts.querySelectorAll(".select-js-option.select-js-customopt");
 				for(var i=0; i<all.length; i++) all[i].parentNode.removeChild( all[i] );
 
@@ -117,7 +120,7 @@
 				}
 
 				all = opts.querySelectorAll(".select-js-option");
-				all = paramlist["customfilter"](target.value, all);
+				all = lazyfilter!=null ? lazyfilter : paramlist["customfilter"](target.value, all);
 				for(var i=0; i<all.length; i++){
 					var opt = document.createElement("div");
 					opt.className = "select-js-option select-js-filtered select-js-customopt";
@@ -258,8 +261,8 @@
 			else toggle(true);
 		});
 		if(editable) {
-			display.addEventListener("change", update);
-			display.addEventListener("keyup", update);
+			display.addEventListener("change", function(){ update() });
+			display.addEventListener("keyup", function(){ update() });
 		}
 
 		target.parentNode.insertBefore(wrapper, target);
@@ -277,5 +280,9 @@
 		wrapper.appendChild(display);
 		wrapper.appendChild(opts);
 		if(prev!=null) prev.parentNode.removeChild(prev);
+
+		return {
+			lazyfilter: function(data){ update(data) }
+		};
 	};
 }()
