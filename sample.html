@@ -63,7 +63,7 @@ hr {
 </head>
 <body>
 	<h1>
-		Select.JS<sup>1.0.18</sup> Example
+		Select.JS<sup>1.0.19</sup> Example
 	</h1>
 	<a href="https://github.com/WolfgangKurz/Select-JS" target="_blank">Github Project</a>
 
@@ -459,6 +459,21 @@ hr {
 			<h2>Editable with Custom-filter</h2>
 
 			<select class="text-md input-hg select-js-editable select-js-customfilter" id="sample_editable_customfilter">
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
+
+		<hr>
+
+		<div class="sector">
+			<code>select-js-nofocus</code>
+			<h2>No focusable (For non-editable)</h2>
+
+			<select class="text-md input-hg select-js-nofocus" id="sample_nofocus">
 				<optgroup label="Flippers">
 					<option value="flip">Flip</option>
 					<option value="flipInX">Flip In X</option>
