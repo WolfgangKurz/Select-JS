@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.16
+ * Version: 1.0.17
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -325,8 +325,14 @@
 			else toggle(true);
 		});
 		if(editable) {
+			var val = "";
 			display.addEventListener("change", function(){ update() });
-			display.addEventListener("keyup", function(){ update() });
+			display.addEventListener("keyup", function(){
+				if(target.value != val){
+					val = target.value;
+					update();
+				}
+			});
 		}
 
 		target.parentNode.insertBefore(wrapper, target);
@@ -361,8 +367,14 @@
 
 				update();
 				toggle();
+
+				e.preventDefault();
+				return false;
 			}else if(e.keyCode==27){ // ESC
 				toggle(false);
+
+				e.preventDefault();
+				return false;
 			}
 		});
 
