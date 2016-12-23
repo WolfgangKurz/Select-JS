@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.15
+ * Version: 1.0.16
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -60,6 +60,7 @@
 
 		var wrapper = document.createElement("div");
 		var opts = document.createElement("div");
+		var focuser = document.createElement("input");
 		var display;
 
 		if(editable) {
@@ -69,9 +70,56 @@
 			if(target.id.length>0) display.id = target.id;
 			if(target.className.length>0) display.className += " "+target.className;
 			if(target.getAttribute("placeholder")!=null) display.placeholder = target.getAttribute("placeholder");
+
+			focuser = display;
 		} else {
 			display = document.createElement("div");
+			focuser = document.createElement("input");
+			focuser.style.width = "1px";
+			focuser.style.height = "1px";
+			focuser.style.overflow = "hidden";
+			focuser.style.opacity = "0";
+			focuser.style.position = "absolute";
 		}
+
+		var focusIdx = null;
+		var updateFocus = function(){
+			var all = opts.querySelectorAll(".select-js-option.select-js-focus");
+			for(var i=0; i<all.length; i++){
+				var clnm = " "+all[i].className+" ";
+				clnm = clnm.replace(" select-js-focus ", " ");
+				all[i].className = clnm.trim();
+			}
+
+			all = opts.querySelectorAll(".select-js-option");
+			if(focusIdx>=all.length) focusIdx = all.length - 1;
+			if(focusIdx<0) focusIdx = 0;
+
+			all[focusIdx].className += " select-js-focus";
+		};
+		var setFocus = function(idx){
+			if(typeof idx=="undefined"){
+				idx = 0;
+
+				var elem = opts.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
+				if(elem != null){
+					var all = opts.querySelectorAll(".select-js-option");
+					for(var i=0; i<all.length; i++){
+						if( all[i]==elem ){
+							idx = i;
+							break;
+						}
+					}
+				}
+			}
+
+			focusIdx = idx;
+			updateFocus();
+		};
+		var moveFocus = function(value){
+			focusIdx += value;
+			updateFocus();
+		};
 
 		var toggle = function(open){
 			var clnm = " "+wrapper.className+" ";
@@ -89,6 +137,11 @@
 			if(current!=null){
 				if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
 				else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
+			}
+
+			if(open) {
+				setFocus();
+				focuser.focus();
 			}
 		};
 		var update = function(lazyfilter){
@@ -250,6 +303,17 @@
 						update();
 						toggle();
 					});
+					opt.addEventListener("mousemove", function(){
+						var idx = -1;
+						var all = opts.querySelectorAll(".select-js-option");
+						for(var i=0; i<all.length; i++){
+							if( all[i]==this ){
+								idx = i;
+								break;
+							}
+						}
+						if(idx>=0) setFocus(idx);
+					});
 					opts.appendChild( opt );
 				}
 			}
@@ -274,8 +338,37 @@
 		}
 		else target.style.display = "none";
 
+		focuser.addEventListener("keydown", function(e){
+			if(e.keyCode==38){ // Up
+				moveFocus(-1);
+			}else if(e.keyCode==40){ // Down
+				var clnm = " "+wrapper.className+" ";
+				var open = clnm.indexOf(" dropdown ")>=0;
+				if(!open) toggle(true);
+
+				moveFocus(+1);
+			}else if(e.keyCode==13){ // Enter
+				var focused = opts.querySelector(".select-js-option.select-js-focus");
+				if(focused!=null) target.value = focused.getAttribute("data-value");
+
+				if(document.createEventObject) {
+					target.fireEvent("onchange");
+				} else {
+					var evt = document.createEvent("HTMLEvents");
+					evt.initEvent("change", false, true);
+					target.dispatchEvent(evt);
+				}
+
+				update();
+				toggle();
+			}else if(e.keyCode==27){ // ESC
+				toggle(false);
+			}
+		});
+
 		update();
 
+		wrapper.appendChild(focuser);
 		wrapper.appendChild(target);
 		wrapper.appendChild(display);
 		wrapper.appendChild(opts);

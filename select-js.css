@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.15
+ * Version: 1.0.16
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -84,7 +84,7 @@
 	font-weight: 600;
 	font-style: italic;
 }
-.select-js .select-js-optlist .select-js-option:hover { background-color: #e8e8e8 }
+.select-js .select-js-optlist .select-js-option.select-js-focus { background-color: #e8e8e8 }
 .select-js .select-js-optlist .select-js-option:last-child { border-bottom: 0 }
 
 .select-js.select-js-scroll .select-js-optlist { overflow-y: scroll }
@@ -120,7 +120,7 @@
 .select-js.select-js-inline .select-js-optlist .select-js-option, .select-js.select-js-inline .select-js-optlist .select-js-optgroup { padding-right: 30px }
 
 .select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: unset }
-.select-js.select-js-editable .select-js-optlist .select-js-option:hover { background-color: #e8e8e8 }
+.select-js.select-js-editable .select-js-optlist .select-js-option:focus { background-color: #e8e8e8 }
 
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option { display: none }
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
