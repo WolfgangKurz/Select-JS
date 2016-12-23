@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.17
+ * Version: 1.0.18
  *
  * Copyright 2016 Wolfgang Kurz
  * Released under the MIT license
@@ -273,6 +273,17 @@
 
 					update();
 					toggle();
+				});
+				opt.addEventListener("mousemove", function(){
+					var idx = -1;
+					var all = opts.querySelectorAll(".select-js-option");
+					for(var i=0; i<all.length; i++){
+						if( all[i]==this ){
+							idx = i;
+							break;
+						}
+					}
+					if(idx>=0) setFocus(idx);
 				});
 			}else{
 				var grpId = Math.random().toFixed(6).substr(2);
