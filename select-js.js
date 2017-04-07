@@ -1,15 +1,16 @@
 /*!
  * Select.JS
- * Version: 1.0.19
+ * Version: 1.0.20
  *
- * Copyright 2016 Wolfgang Kurz
+ * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
  * https://github.com/WolfgangKurz/Select-JS
  */
 "use strict";
 !function(){
 	var selectjs = {
-		initialized: false
+		initialized: false,
+		global_optlist: null
 	};
 	var selectjs_initialize = function(){
 		document.addEventListener("click", function(e){
@@ -23,7 +24,11 @@
 				}
 				x = x.parentNode;
 			}
-			var selects = document.querySelectorAll(".select-js.dropdown");
+			var ex = "";
+			if( obj===null || (" "+obj.className+" ").indexOf(" select-js-global ")<0 )
+				ex = ",.select-js-global-optlist.dropdown";
+
+			var selects = document.querySelectorAll(".select-js.dropdown"+ex);
 			for(var i=0; i<selects.length; i++){
 				if(obj==selects[i]) continue;
 
@@ -34,6 +39,13 @@
 				selects[i].className = clnm.trim();
 			}
 		});
+
+		var global_optlist = document.createElement("div");
+		global_optlist.className = "select-js-global-optlist select-js-optlist";
+		selectjs.global_optlist = global_optlist;
+
+		document.querySelector("body").appendChild(selectjs.global_optlist);
+		selectjs.initialized = true;
 	};
 
 	HTMLElement.prototype.selectjs = function(params){
@@ -46,13 +58,14 @@
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
-		var editable = false, is_autofilter = false, is_customfilter = false, is_nofocus = false;
+		var editable = false, is_autofilter = false, is_customfilter = false, is_nofocus = false, is_global = false;
 		{
 			var clnm = " "+target.className+" ";
 			editable = clnm.indexOf(" select-js-editable ")>=0;
 			is_autofilter = clnm.indexOf(" select-js-autofilter ")>=0;
 			is_customfilter = clnm.indexOf(" select-js-customfilter ")>=0;
 			is_nofocus = clnm.indexOf(" select-js-nofocus ")>=0;
+			is_global = clnm.indexOf(" select-js-global ")>=0;
 		}
 
 		var ismobile = function() {
@@ -111,13 +124,15 @@
 
 			all[focusIdx].className += " select-js-focus";
 		};
-		var setFocus = function(idx){
-			if(typeof idx=="undefined"){
+		var setFocus = function(idx, target){
+			if(target===null || typeof target=="undefined") target = opts;
+
+			if(idx===null || typeof idx=="undefined"){
 				idx = 0;
 
-				var elem = opts.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
+				var elem = target.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
 				if(elem != null){
-					var all = opts.querySelectorAll(".select-js-option");
+					var all = target.querySelectorAll(".select-js-option");
 					for(var i=0; i<all.length; i++){
 						if( all[i]==elem ){
 							idx = i;
@@ -141,20 +156,63 @@
 			if(typeof open=="undefined")
 				open = clnm.indexOf(" dropdown ")<0;
 
-			if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
-			else clnm = clnm.replace(" dropdown ", " ");
+			if(is_global){
+				var m = selectjs.global_optlist;
+				m.innerHTML = "";
+				for(var i=0; i<opts.children.length; i++) {
+					!function(ch, src){
+						ch.addEventListener("click", function(){
+							if(document.createEventObject) {
+								src.fireEvent("onclick");
+							} else {
+								var evt = document.createEvent("HTMLEvents");
+								evt.initEvent("click", false, true);
+								src.dispatchEvent(evt);
+							}
+						});
+						m.appendChild(ch);
+					}( opts.children[i].cloneNode(true), opts.children[i] );
+				}
 
-			while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-			wrapper.className = clnm.trim();
+				clnm = " "+m.className+" ";
+				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
+				else clnm = clnm.replace(" dropdown ", " ");
 
-			var current = opts.querySelector(".select-js-option.selected");
-			if(current!=null){
-				if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
-				else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
+				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+				m.className = clnm.trim();
+
+				var current = m.querySelector(".select-js-option.selected");
+				if(current!=null){
+					if(m.scrollTo) m.scrollTo(0, current.offsetTop - m.clientHeight/2);
+					else m.scrollTop = current.offsetTop - m.clientHeight/2;
+				}
+
+				var left = 0, top = 0, x = wrapper;
+				while(x!==null && x.tagName!="BODY"){
+					left += x.offsetLeft;
+					top += x.offsetTop;
+					x = x.parentNode;
+					break;
+				}
+				m.style.left = left+"px";
+				m.style.top = (top+wrapper.clientHeight)+"px";
+				m.style.width = (wrapper.clientWidth+2)+"px";
+			}else{
+				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
+				else clnm = clnm.replace(" dropdown ", " ");
+
+				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
+				wrapper.className = clnm.trim();
+
+				var current = opts.querySelector(".select-js-option.selected");
+				if(current!=null){
+					if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
+					else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
+				}
 			}
 
 			if(open) {
-				setFocus();
+				setFocus(null, m);
 				focuser.focus();
 			}
 		};
