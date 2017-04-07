@@ -67,6 +67,7 @@
 	text-align: left;
 	overflow-x: hidden;
 	overflow-y: auto;
+	cursor: pointer;
 	z-index: 19424;
 }
 .select-js.select-js-inline .select-js-optlist, .select-js-global-optlist.select-js-optlist {

@@ -123,6 +123,13 @@
 			if(focusIdx<0) focusIdx = 0;
 
 			all[focusIdx].className += " select-js-focus";
+
+			var m = focusIdx;
+			all = selectjs.global_optlist.querySelectorAll(".select-js-option");
+			if(m>=all.length) m = all.length - 1;
+			if(m<0) m = 0;
+
+			all[m].className += " select-js-focus";
 		};
 		var setFocus = function(idx, target){
 			if(target===null || typeof target=="undefined") target = opts;
@@ -141,6 +148,8 @@
 					}
 				}
 			}
+			if( target!=selectjs.global_optlist )
+				setFocus(idx, selectjs.global_optlist);
 
 			focusIdx = idx;
 			updateFocus();
@@ -167,6 +176,15 @@
 							} else {
 								var evt = document.createEvent("HTMLEvents");
 								evt.initEvent("click", false, true);
+								src.dispatchEvent(evt);
+							}
+						});
+						ch.addEventListener("mousemove", function(){
+							if(document.createEventObject) {
+								src.fireEvent("onmousemove");
+							} else {
+								var evt = document.createEvent("HTMLEvents");
+								evt.initEvent("mousemove", false, true);
 								src.dispatchEvent(evt);
 							}
 						});
@@ -197,6 +215,9 @@
 				m.style.left = left+"px";
 				m.style.top = (top+wrapper.clientHeight)+"px";
 				m.style.width = (wrapper.clientWidth+2)+"px";
+				m.style.fontFamily = window.getComputedStyle(wrapper).fontFamily;
+				m.style.fontStyle = window.getComputedStyle(wrapper).fontStyle;
+				m.style.fontSize = window.getComputedStyle(wrapper).fontSize;
 			}else{
 				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
 				else clnm = clnm.replace(" dropdown ", " ");
