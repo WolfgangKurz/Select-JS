@@ -124,12 +124,14 @@
 
 			all[focusIdx].className += " select-js-focus";
 
-			var m = focusIdx;
-			all = selectjs.global_optlist.querySelectorAll(".select-js-option");
-			if(m>=all.length) m = all.length - 1;
-			if(m<0) m = 0;
+			if(is_global){
+				var m = focusIdx;
+				all = selectjs.global_optlist.querySelectorAll(".select-js-option");
+				if(m>=all.length) m = all.length - 1;
+				if(m<0) m = 0;
 
-			all[m].className += " select-js-focus";
+				all[m].className += " select-js-focus";
+			}
 		};
 		var setFocus = function(idx, target){
 			if(target===null || typeof target=="undefined") target = opts;
@@ -148,7 +150,7 @@
 					}
 				}
 			}
-			if( target!=selectjs.global_optlist )
+			if( is_global && target!=selectjs.global_optlist )
 				setFocus(idx, selectjs.global_optlist);
 
 			focusIdx = idx;
