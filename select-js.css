@@ -1,8 +1,8 @@
 /*!
  * Select.JS
- * Version: 1.0.19
+ * Version: 1.0.20
  *
- * Copyright 2016 Wolfgang Kurz
+ * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
  * https://github.com/WolfgangKurz/Select-JS
  */
@@ -54,7 +54,7 @@
 	white-space: unset;
 	text-overflow:unset;
 }
-.select-js .select-js-optlist {
+.select-js .select-js-optlist, .select-js-global-optlist.select-js-optlist {
 	position: absolute;
 	display: none;
 	margin-bottom: 14px;
@@ -67,9 +67,10 @@
 	text-align: left;
 	overflow-x: hidden;
 	overflow-y: auto;
+	cursor: pointer;
 	z-index: 19424;
 }
-.select-js.select-js-inline .select-js-optlist {
+.select-js.select-js-inline .select-js-optlist, .select-js-global-optlist.select-js-optlist {
 	right: unset;
 	border-radius: 0 3px 3px 3px;
 }
@@ -78,19 +79,19 @@
 	right: -1px;
 	border-radius: 0 3px 3px 3px;
 }
-.select-js .select-js-optlist .select-js-option, .select-js .select-js-optlist .select-js-optgroup {
+.select-js-optlist .select-js-option, .select-js-optlist .select-js-optgroup {
 	display: block;
 	padding: 4px 10px 4px 6px;
 	border-bottom: 1px solid #dcdcdc;
 }
-.select-js .select-js-optlist .select-js-option.select-js-indent { padding-left: 18px }
-.select-js .select-js-optlist .select-js-option.selected { background-color:#f6f6f6 }
-.select-js .select-js-optlist .select-js-optgroup {
+.select-js-optlist .select-js-option.select-js-indent { padding-left: 18px }
+.select-js-optlist .select-js-option.selected { background-color:#f6f6f6 }
+.select-js-optlist .select-js-optgroup {
 	font-weight: 600;
 	font-style: italic;
 }
-.select-js .select-js-optlist .select-js-option.select-js-focus { background-color: #e8e8e8 }
-.select-js .select-js-optlist .select-js-option:last-child { border-bottom: 0 }
+.select-js-optlist .select-js-option.select-js-focus { background-color: #e8e8e8 }
+.select-js-optlist .select-js-option:last-child { border-bottom: 0 }
 
 .select-js.select-js-scroll .select-js-optlist { overflow-y: scroll }
 .select-js.select-js-noscroll .select-js-optlist { overflow-y: hidden }
@@ -120,7 +121,7 @@
 .select-js.dropdown::before {
 	background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20width%3D%229%22%20height%3D%229%22%3E%3Cpath%20d%3D%22M1%2C6%20L4.5%2C2%208%2C6%22%20fill%3D%22%230077CC%22%2F%3E%3C%2Fsvg%3E);
 }
-.select-js.dropdown .select-js-optlist { display: block }
+.select-js.dropdown .select-js-optlist, .select-js-global-optlist.select-js-optlist.dropdown { display: block }
 
 .select-js.select-js-inline .select-js-optlist .select-js-option, .select-js.select-js-inline .select-js-optlist .select-js-optgroup { padding-right: 30px }
 
