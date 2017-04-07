@@ -11,7 +11,7 @@
 	display: inline-block;
 	border: none;
 	border-bottom: 1px solid #b4b4b4;
-	background-color: #fff;
+	background-color: transparent;
 	vertical-align: middle;
 	cursor: pointer;
 	-webkit-user-select: none;
