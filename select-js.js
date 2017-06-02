@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.21
+ * Version: 1.0.22
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -8,6 +8,34 @@
  */
 "use strict";
 !function(){
+	HTMLElement.prototype.addClass = function(x){
+		var y = x.split(" "), z = this.className.split(" ");
+		for(var i=0; i<y.length; i++){
+			if( y[i].trim().length==0 ) continue;
+			if( z.indexOf(y[i])>=0 ) continue;
+			z.push(y[i]);
+		}
+		this.className = z.filter(function(_){return _.length>0}).join(" ");
+		return this;
+	};
+	HTMLElement.prototype.removeClass = function(x){
+		var y = x.split(" "), z = this.className.split(" ");
+		for(var i=0, j; i<y.length; i++){
+			if( y[i].trim().length==0 ) continue;
+			while((j=z.indexOf(y[i])) >=0) z.splice(j, 1);
+		}
+		this.className = z.filter(function(_){return _.length>0}).join(" ");
+		return this;
+	};
+	HTMLElement.prototype.hasClass = function(x){
+		var y = this.className.split(" ");
+		for(var i=0, j; i<y.length; i++){
+			if( y[i].trim().length==0 ) continue;
+			if(y[i]==x) return true;
+		}
+		return false;
+	};
+
 	var selectjs = {
 		initialized: false,
 		global_optlist: null
@@ -25,23 +53,18 @@
 				x = x.parentNode;
 			}
 			var ex = "";
-			if( obj===null || (" "+obj.className+" ").indexOf(" select-js-global ")<0 )
+			if( obj===null || !obj.hasClass("select-js-global") )
 				ex = ",.select-js-global-optlist.dropdown";
 
 			var selects = document.querySelectorAll(".select-js.dropdown"+ex);
 			for(var i=0; i<selects.length; i++){
 				if(obj==selects[i]) continue;
-
-				var clnm = " "+selects[i].className+" ";
-				clnm = clnm.replace(" dropdown ", " ");
-
-				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				selects[i].className = clnm.trim();
+				selects[i].removeClass("dropdown");
 			}
 		});
 
 		var global_optlist = document.createElement("div");
-		global_optlist.className = "select-js-global-optlist select-js-optlist";
+		global_optlist.addClass("select-js-global-optlist select-js-optlist");
 		selectjs.global_optlist = global_optlist;
 
 		document.querySelector("body").appendChild(selectjs.global_optlist);
@@ -58,16 +81,12 @@
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
-		var editable = false, is_autofilter = false, is_customfilter = false, is_nofocus = false, is_global = false, is_inline = false;
-		{
-			var clnm = " "+target.className+" ";
-			editable = clnm.indexOf(" select-js-editable ")>=0;
-			is_autofilter = clnm.indexOf(" select-js-autofilter ")>=0;
-			is_customfilter = clnm.indexOf(" select-js-customfilter ")>=0;
-			is_nofocus = clnm.indexOf(" select-js-nofocus ")>=0;
-			is_global = clnm.indexOf(" select-js-global ")>=0;
-			is_inline = clnm.indexOf(" select-js-inline ")>=0;
-		}
+		var editable = target.hasClass("select-js-editable"),
+			is_autofilter = target.hasClass("select-js-autofilter"),
+			is_customfilter = target.hasClass("select-js-customfilter"),
+			is_nofocus = target.hasClass("select-js-nofocus"),
+			is_global = target.hasClass("select-js-global"),
+			is_inline = target.hasClass("select-js-inline");
 
 		var ismobile = function() {
 			var check = false;
@@ -78,7 +97,7 @@
 			is_nofocus = true;
 
 		var prev = target.parentNode;
-		if( (" "+prev.className+" ").indexOf(" select-js ")<0 ) prev = null;
+		if( !prev.hasClass("select-js") ) prev = null;
 		else prev.parentNode.insertBefore(target, prev);
 
 		var wrapper = document.createElement("div");
@@ -88,10 +107,11 @@
 
 		if(editable) {
 			display = document.createElement("input");
+			display.addClass(target.className);
 			display.autocomplete = "off";
+
 			if(target.name.length>0) display.name = target.name;
 			if(target.id.length>0) display.id = target.id;
-			if(target.className.length>0) display.className += " "+target.className;
 			if(target.getAttribute("placeholder")!=null) display.placeholder = target.getAttribute("placeholder");
 
 			focuser = display;
@@ -113,17 +133,14 @@
 		var focusIdx = null;
 		var updateFocus = function(){
 			var all = opts.querySelectorAll(".select-js-option.select-js-focus");
-			for(var i=0; i<all.length; i++){
-				var clnm = " "+all[i].className+" ";
-				clnm = clnm.replace(" select-js-focus ", " ");
-				all[i].className = clnm.trim();
-			}
+			for(var i=0; i<all.length; i++)
+				all[i].removeClass("select-js-focus");
 
 			all = opts.querySelectorAll(".select-js-option");
 			if(focusIdx>=all.length) focusIdx = all.length - 1;
 			if(focusIdx<0) focusIdx = 0;
 
-			all[focusIdx].className += " select-js-focus";
+			all[focusIdx].addClass("select-js-focus");
 
 			if(is_global){
 				var m = focusIdx;
@@ -131,7 +148,7 @@
 				if(m>=all.length) m = all.length - 1;
 				if(m<0) m = 0;
 
-				all[m].className += " select-js-focus";
+				all[m].addClass("select-js-focus");
 			}
 		};
 		var setFocus = function(idx, target){
@@ -163,10 +180,8 @@
 		};
 
 		var toggle = function(open){
-			var clnm = " "+wrapper.className+" ";
-
 			if(typeof open=="undefined")
-				open = clnm.indexOf(" dropdown ")<0;
+				open = !wrapper.hasClass("dropdown");
 
 			if(is_global){
 				var m = selectjs.global_optlist;
@@ -195,12 +210,10 @@
 					}( opts.children[i].cloneNode(true), opts.children[i] );
 				}
 
-				clnm = " "+m.className+(is_inline ? " select-js-inline" : "")+" ";
-				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
-				else clnm = clnm.replace(" dropdown ", " ");
-
-				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				m.className = clnm.trim();
+				
+				m.addClass(is_inline ? "select-js-inline" : "");
+				if(open) m.addClass( !m.hasClass("dropdown") ? "dropdown" : "" );
+				else m.removeClass("dropdown");
 
 				var current = m.querySelector(".select-js-option.selected");
 				if(current!=null){
@@ -209,11 +222,11 @@
 				}
 
 				var left = 0, top = 0, x = wrapper;
-				while(x!==null && x.tagName!="BODY"){
+				while( x!==null && x.tagName!="BODY" ){
 					left += x.offsetLeft;
 					top += x.offsetTop;
-					x = x.parentNode;
-					break;
+
+					x = x.offsetParent;
 				}
 				m.style.left = left+"px";
 				m.style.top = (top+wrapper.clientHeight)+"px";
@@ -225,11 +238,8 @@
 				m.style.fontStyle = window.getComputedStyle(wrapper).fontStyle;
 				m.style.fontSize = window.getComputedStyle(wrapper).fontSize;
 			}else{
-				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
-				else clnm = clnm.replace(" dropdown ", " ");
-
-				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				wrapper.className = clnm.trim();
+				if(open) wrapper.addClass(!wrapper.hasClass("dropdown") ? "dropdown" : "");
+				else wrapper.removeClass("dropdown");
 
 				var current = opts.querySelector(".select-js-option.selected");
 				if(current!=null){
@@ -247,13 +257,8 @@
 			if(typeof lazyfilter=="undefined") lazyfilter = null;
 
 			var all = opts.querySelectorAll(".select-js-option.selected");
-			for(var i=0; i<all.length; i++){
-				var clnm = " "+all[i].className+" ";
-				clnm = clnm.replace(" selected ", " ");
-
-				while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-				all[i].className = clnm.trim();
-			}
+			for(var i=0; i<all.length; i++)
+				all[i].removeClass("selected");
 
 			if(is_customfilter && (lazyfilter!=null || "customfilter" in paramlist)){
 				all = opts.querySelectorAll(".select-js-option.select-js-customopt");
@@ -261,21 +266,17 @@
 
 				all = opts.querySelectorAll(".select-js-option");
 				for(var i=0; i<all.length; i++){
-					var clnm = " "+all[i].className+" ";
-					clnm = clnm.replace(" select-js-filtered ", " ");
+					all[i].removeClass("select-js-filtered");
 
 					if(target.value.length==0 || all[i].innerHTML.indexOf(target.value)>=0)
-						clnm += " select-js-filtered";
-
-					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-					all[i].className = clnm.trim();
+						all[i].addClass("select-js-filtered");
 				}
 
 				all = opts.querySelectorAll(".select-js-option");
 				all = lazyfilter!=null ? lazyfilter : paramlist["customfilter"](target.value, all);
 				for(var i=0; i<all.length; i++){
 					var opt = document.createElement("div");
-					opt.className = "select-js-option select-js-filtered select-js-customopt";
+					opt.addClass("select-js-option select-js-filtered select-js-customopt");
 					opt.innerHTML = all[i].display;
 					opt.setAttribute("data-value", all[i].value);
 					opt.addEventListener("click", function(){
@@ -297,66 +298,54 @@
 
 				all = opts.querySelectorAll(".select-js-optgroup");
 				for(var i=0; i<all.length; i++){
-					var clnm = " "+all[i].className+" ";
-					clnm = clnm.replace(" select-js-filteredless ", " ");
+					all[i].removeClass("select-js-filteredless");
 
 					var selector =
 						".select-js-option.select-js-filtered"
 						+ "[select-js-optgroup=\""+all[i].getAttribute("select-js-optgroup")+"\"]";
 
 					if(opts.querySelectorAll(selector).length==0)
-						clnm += " select-js-filteredless";
-
-					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-					all[i].className = clnm.trim();
+						all[i].addClass("select-js-filteredless");
 				}
 			}else if(is_autofilter){
 				all = opts.querySelectorAll(".select-js-option");
 				for(var i=0; i<all.length; i++){
-					var clnm = " "+all[i].className+" ";
-					clnm = clnm.replace(" select-js-filtered ", " ");
+					all[i].removeClass("select-js-filtered");
 
 					if(target.value.length==0 || all[i].innerHTML.indexOf(target.value)>=0)
-						clnm += " select-js-filtered";
-
-					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-					all[i].className = clnm.trim();
+						all[i].addClass("select-js-filtered");
 				}
 
 				all = opts.querySelectorAll(".select-js-optgroup");
 				for(var i=0; i<all.length; i++){
-					var clnm = " "+all[i].className+" ";
-					clnm = clnm.replace(" select-js-filteredless ", " ");
+					all[i].removeClass("select-js-filteredless");
 
 					var selector =
 						".select-js-option.select-js-filtered"
 						+ "[select-js-optgroup=\""+all[i].getAttribute("select-js-optgroup")+"\"]";
 
 					if(opts.querySelectorAll(selector).length==0)
-						clnm += " select-js-filteredless";
-
-					while(clnm.indexOf("  ")>=0) clnm = clnm.replace(/  /g, " ");
-					all[i].className = clnm.trim();
+						all[i].addClass("select-js-filteredless");
 				}
 			}
 
 			var current = opts.querySelector(".select-js-option[data-value=\""+target.value+"\"]");
 			if(current!=null){
-				current.className += " selected";
+				current.addClass("selected");
 				if(!editable) display.innerHTML = current.innerHTML;
 			}
 		};
 
-		wrapper.className = ("select-js " + target.className).trim();
-		display.className = "select-js-display";
-		opts.className = "select-js-optlist";
+		wrapper.addClass("select-js " + target.className);
+		display.addClass("select-js-display");
+		opts.addClass("select-js-optlist");
 
 		var ops = target.children;
 		for(var i=0; i<ops.length; i++){
 			var opt = document.createElement("div");
 
 			if(ops[i].tagName.toLowerCase()=="option"){
-				opt.className = ("select-js-option " + ops[i].className).trim();
+				opt.addClass("select-js-option " + ops[i].className);
 				opt.innerHTML = ops[i].innerHTML;
 				opt.setAttribute("data-value", ops[i].value);
 				opt.addEventListener("click", function(){
@@ -387,7 +376,7 @@
 			}else{
 				var grpId = Math.random().toFixed(6).substr(2);
 				opt.innerHTML = ops[i].label;
-				opt.className = "select-js-optgroup";
+				opt.addClass("select-js-optgroup");
 				opt.setAttribute("select-js-optgroup", "grp"+grpId);
 				opts.appendChild( opt );
 
@@ -395,7 +384,7 @@
 				for(var j=0; j<ops2.length; j++){
 					var opt = document.createElement("div");
 
-					opt.className = ("select-js-option select-js-indent " + ops2[j].className).trim();
+					opt.addClass("select-js-option select-js-indent " + ops2[j].className);
 					opt.innerHTML = ops2[j].innerHTML;
 					opt.setAttribute("data-value", ops2[j].value);
 					opt.setAttribute("select-js-optgroup", "grp"+grpId);
@@ -458,8 +447,7 @@
 			if(e.keyCode==38){ // Up
 				moveFocus(-1);
 			}else if(e.keyCode==40){ // Down
-				var clnm = " "+wrapper.className+" ";
-				var open = clnm.indexOf(" dropdown ")>=0;
+				var open = wrapper.hasClass("dropdown");
 				if(!open) toggle(true);
 
 				moveFocus(+1);

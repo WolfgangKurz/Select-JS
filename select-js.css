@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.20
+ * Version: 1.0.22
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -51,8 +51,8 @@
 	border: none;
 	outline: none !important;
 	border-radius: 3px;
-	white-space: unset;
-	text-overflow:unset;
+	white-space: normal;
+	text-overflow: clip;
 }
 .select-js .select-js-optlist, .select-js-global-optlist.select-js-optlist {
 	position: absolute;
@@ -71,11 +71,11 @@
 	z-index: 19424;
 }
 .select-js.select-js-inline .select-js-optlist, .select-js-global-optlist.select-js-optlist {
-	right: unset;
+	right: auto;
 	border-radius: 0 3px 3px 3px;
 }
 .select-js.select-js-inline.select-js-inline-right .select-js-optlist {
-	left: unset;
+	left: auto;
 	right: -1px;
 	border-radius: 0 3px 3px 3px;
 }
@@ -125,7 +125,7 @@
 
 .select-js.select-js-inline .select-js-optlist .select-js-option, .select-js.select-js-inline .select-js-optlist .select-js-optgroup { padding-right: 30px }
 
-.select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: unset }
+.select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: transparent }
 .select-js.select-js-editable .select-js-optlist .select-js-option:focus { background-color: #e8e8e8 }
 
 .select-js.select-js-editable.select-js-autofilter .select-js-optlist .select-js-option { display: none }

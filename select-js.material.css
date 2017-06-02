@@ -1,6 +1,6 @@
 /*!
  * Select.JS Material
- * Version: 1.0.20
+ * Version: 1.0.22
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -48,8 +48,8 @@
 .select-js input.select-js-display {
 	border: none;
 	outline: none !important;
-	white-space: unset;
-	text-overflow:unset;
+	white-space: normal;
+	text-overflow: clip;
 	font: inherit;
 }
 .select-js .select-js-optlist, .select-js-global-optlist.select-js-optlist {
@@ -73,9 +73,9 @@
 	opacity: 0;
 	pointer-events: none;
 }
-.select-js-global-optlist.select-js-optlist { margin-top: -2rem }
-.select-js.select-js-inline .select-js-optlist, .select-js-global-optlist.select-js-optlist { right: unset }
-.select-js.select-js-inline.select-js-inline-right .select-js-optlist { left: unset; right: -1px }
+.select-js-global-optlist.select-js-optlist { margin-top: -2.5rem }
+.select-js.select-js-inline .select-js-optlist, .select-js-global-optlist.select-js-optlist { right: auto }
+.select-js.select-js-inline.select-js-inline-right .select-js-optlist { left: auto; right: -1px }
 .select-js-optlist .select-js-option, .select-js-optlist .select-js-optgroup {
 	display: block;
 	padding: 0 0.5rem;
@@ -97,7 +97,7 @@
 .select-js.select-js-up .select-js-optlist {
 	margin-top: 14px;
 	margin-bottom: 0;
-	top: unset;
+	top: auto;
 	bottom: -1px;
 }
 .select-js.select-js-inline .select-js-optlist .select-js-option, .select-js-global-optlist.select-js-inline .select-js-option { white-space: nowrap }
@@ -111,7 +111,7 @@
 
 .select-js.select-js-inline .select-js-optlist .select-js-option, .select-js.select-js-inline .select-js-optlist .select-js-optgroup { padding-right: 30px }
 
-.select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: unset }
+.select-js.select-js-editable .select-js-optlist .select-js-option.selected { background-color: transparent }
 .select-js.select-js-editable .select-js-optlist .select-js-option:focus { background-color: #e8e8e8 }
 .select-js.select-js-editable .select-js-optlist { top: 100% }
 .select-js.select-js-editable.select-js-up .select-js-optlist { bottom: 100% }
