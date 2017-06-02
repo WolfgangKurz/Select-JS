@@ -103,7 +103,7 @@
 	border-radius: 3px 3px 0 0;
 	bottom: 100%;
 }
-.select-js.select-js-inline .select-js-optlist .select-js-option { white-space: nowrap }
+.select-js.select-js-inline .select-js-optlist .select-js-option, .select-js-global-optlist.select-js-inline .select-js-option { white-space: nowrap }
 .select-js.select-js-up::before {
 	background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20width%3D%229%22%20height%3D%229%22%3E%3Cpath%20d%3D%22M1%2C6%20L4.5%2C2%208%2C6%22%20fill%3D%22%23787878%22%2F%3E%3C%2Fsvg%3E);
 }

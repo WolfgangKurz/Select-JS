@@ -100,7 +100,7 @@
 	top: unset;
 	bottom: -1px;
 }
-.select-js.select-js-inline .select-js-optlist .select-js-option { white-space: nowrap }
+.select-js.select-js-inline .select-js-optlist .select-js-option, .select-js-global-optlist.select-js-inline .select-js-option { white-space: nowrap }
 
 .select-js.dropdown { outline: none !important }
 .select-js.dropdown .select-js-optlist, .select-js-global-optlist.select-js-optlist.dropdown {

@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.20
+ * Version: 1.0.21
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -58,7 +58,7 @@
 		var target = this;
 		if(!selectjs.initialized) selectjs_initialize();
 
-		var editable = false, is_autofilter = false, is_customfilter = false, is_nofocus = false, is_global = false;
+		var editable = false, is_autofilter = false, is_customfilter = false, is_nofocus = false, is_global = false, is_inline = false;
 		{
 			var clnm = " "+target.className+" ";
 			editable = clnm.indexOf(" select-js-editable ")>=0;
@@ -66,6 +66,7 @@
 			is_customfilter = clnm.indexOf(" select-js-customfilter ")>=0;
 			is_nofocus = clnm.indexOf(" select-js-nofocus ")>=0;
 			is_global = clnm.indexOf(" select-js-global ")>=0;
+			is_inline = clnm.indexOf(" select-js-inline ")>=0;
 		}
 
 		var ismobile = function() {
@@ -194,7 +195,7 @@
 					}( opts.children[i].cloneNode(true), opts.children[i] );
 				}
 
-				clnm = " "+m.className+" ";
+				clnm = " "+m.className+(is_inline ? " select-js-inline" : "")+" ";
 				if(open) clnm += (clnm.indexOf(" dropdown ")<0 ? " dropdown" : "");
 				else clnm = clnm.replace(" dropdown ", " ");
 
@@ -216,7 +217,10 @@
 				}
 				m.style.left = left+"px";
 				m.style.top = (top+wrapper.clientHeight)+"px";
-				m.style.width = (wrapper.clientWidth+2)+"px";
+
+				if(!is_inline) m.style.width = (wrapper.clientWidth+2)+"px";
+				else m.style.width = "";
+
 				m.style.fontFamily = window.getComputedStyle(wrapper).fontFamily;
 				m.style.fontStyle = window.getComputedStyle(wrapper).fontStyle;
 				m.style.fontSize = window.getComputedStyle(wrapper).fontSize;
