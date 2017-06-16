@@ -23,6 +23,7 @@ select-js-noscroll | Droplist will hide vertical scroll.
 select-js-editable | Droplist will be changed to text input element. Caution! Cannot back to select element.
 select-js-autofilter | Options will be filtered automatically by input value. `Editable only.`
 select-js-customfilter | Options will be filtered (or display something new) by user function. `Editable only.`
+select-js-global | Droplist will share list element, and it added to body dom element.
 
 On `select-js-editable`, you can use some attributes for design.
 
