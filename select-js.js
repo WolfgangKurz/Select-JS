@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.22
+ * Version: 1.0.23
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -221,7 +221,11 @@
 					else m.scrollTop = current.offsetTop - m.clientHeight/2;
 				}
 
-				var left = 0, top = 0, x = wrapper;
+				var left = 0, top = 0, x = wrapper, dy = 0;
+				/* Uncomment for material
+				current.offsetTop - m.scrollTop;
+				*/
+
 				while( x!==null && x.tagName!="BODY" ){
 					left += x.offsetLeft;
 					top += x.offsetTop;
@@ -229,7 +233,7 @@
 					x = x.offsetParent;
 				}
 				m.style.left = left+"px";
-				m.style.top = (top+wrapper.clientHeight)+"px";
+				m.style.top = (top+wrapper.clientHeight - dy)+"px";
 
 				if(!is_inline) m.style.width = (wrapper.clientWidth+2)+"px";
 				else m.style.width = "";
@@ -246,6 +250,11 @@
 					if(opts.scrollTo) opts.scrollTo(0, current.offsetTop - opts.clientHeight/2);
 					else opts.scrollTop = current.offsetTop - opts.clientHeight/2;
 				}
+
+				/* Uncomment for material
+				var dy = current.offsetTop - opts.scrollTop;
+				opts.style.marginTop = -(dy+4) + "px";
+				*/
 			}
 
 			if(open) {
