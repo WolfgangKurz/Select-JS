@@ -223,7 +223,7 @@
 
 				var left = 0, top = 0, x = wrapper, dy = 0;
 				/* Uncomment for material
-				current.offsetTop - m.scrollTop;
+				dy = current.offsetTop - m.scrollTop;
 				*/
 
 				while( x!==null && x.tagName!="BODY" ){
