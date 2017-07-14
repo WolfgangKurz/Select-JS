@@ -180,11 +180,12 @@
 		};
 
 		var toggle = function(open){
-			if(typeof open=="undefined")
-				open = !wrapper.hasClass("dropdown");
-
 			if(is_global){
 				var m = selectjs.global_optlist;
+
+				if(typeof open=="undefined")
+					open = !m.hasClass("dropdown");
+
 				m.innerHTML = "";
 				for(var i=0; i<opts.children.length; i++) {
 					!function(ch, src){
@@ -242,6 +243,9 @@
 				m.style.fontStyle = window.getComputedStyle(wrapper).fontStyle;
 				m.style.fontSize = window.getComputedStyle(wrapper).fontSize;
 			}else{
+				if(typeof open=="undefined")
+					open = !wrapper.hasClass("dropdown");
+
 				if(open) wrapper.addClass(!wrapper.hasClass("dropdown") ? "dropdown" : "");
 				else wrapper.removeClass("dropdown");
 
