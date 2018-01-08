@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.23
+ * Version: 1.0.24
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -46,7 +46,7 @@
 			while(x != null){
 				if(!("tagName" in x)) break;
 				if(x.tagName.toLowerCase()=="body") break;
-				if( (" "+x.className+" ").indexOf(" select-js ")>=0 ){
+				if( x.hasClass("select-js") || x.hasClass("select-js-global-optlist") ){
 					obj = x;
 					break;
 				}
@@ -67,8 +67,15 @@
 		global_optlist.addClass("select-js-global-optlist select-js-optlist");
 		selectjs.global_optlist = global_optlist;
 
+		var global_opt_test = document.createElement("div");
+		global_opt_test.addClass("select-js-global-optlist select-js-optlist select-js-test");
+		selectjs.global_opt_test = global_opt_test;
+
 		document.querySelector("body").appendChild(selectjs.global_optlist);
+		document.querySelector("body").appendChild(selectjs.global_opt_test);
 		selectjs.initialized = true;
+
+		selectjs.scrollsize = selectjs.global_opt_test.offsetHeight - selectjs.global_opt_test.clientHeight;
 	};
 
 	HTMLElement.prototype.selectjs = function(params){
@@ -86,7 +93,14 @@
 			is_customfilter = target.hasClass("select-js-customfilter"),
 			is_nofocus = target.hasClass("select-js-nofocus"),
 			is_global = target.hasClass("select-js-global"),
-			is_inline = target.hasClass("select-js-inline");
+			is_inline = target.hasClass("select-js-inline"),
+			is_fullsize = target.hasClass("select-js-fullsize"),
+			is_noadjust = target.hasClass("select-js-noadjust");
+
+		if(is_fullsize){
+			is_global = true;
+			this.addClass("select-js-global");
+		}
 
 		var ismobile = function() {
 			var check = false;
@@ -211,10 +225,34 @@
 					}( opts.children[i].cloneNode(true), opts.children[i] );
 				}
 
-				
-				m.addClass(is_inline ? "select-js-inline" : "");
+				m.removeClass("select-js-inline select-js-fullsize");
+
+				m.addClass(is_inline ? "select-js-inline" : "")
+					.addClass(is_fullsize ? "select-js-fullsize" : "");
+
 				if(open) m.addClass( !m.hasClass("dropdown") ? "dropdown" : "" );
-				else m.removeClass("dropdown");
+				else {
+					m.removeClass("dropdown");
+					return;
+				}
+
+				m.style.left = "-99999px";
+				m.style.top = "-99999px";
+
+				var style = window.getComputedStyle(wrapper);
+				m.style.fontFamily = style.fontFamily;
+				m.style.fontStyle = style.fontStyle;
+				m.style.fontSize = style.fontSize;
+
+				m.style.marginLeft = "";
+				m.style.marginTop = "";
+				m.style.columnCount = "";
+
+				if(!is_fullsize && !is_inline){
+					m.style.width = (wrapper.clientWidth+3)+"px";
+				}else if(!is_fullsize){
+					m.style.width = "";
+				}
 
 				var current = m.querySelector(".select-js-option.selected");
 				if(current!=null){
@@ -224,30 +262,68 @@
 
 				var left = 0, top = 0, x = wrapper, dy = 0;
 				/* Uncomment for material
-				dy = current.offsetTop - m.scrollTop;
-				*/
-
-				while( x!==null && x.tagName!="BODY" ){
+				if(!is_fullsize) dy = current.offsetTop - m.scrollTop;
+				// */
+				while( x!==null && x.tagName.toUpperCase()!="BODY" ){
 					left += x.offsetLeft;
 					top += x.offsetTop;
 
 					x = x.offsetParent;
 				}
-				m.style.left = left+"px";
-				m.style.top = (top+wrapper.clientHeight - dy)+"px";
 
-				if(!is_inline) m.style.width = (wrapper.clientWidth+2)+"px";
-				else m.style.width = "";
+				if(!is_fullsize && !is_inline){
+					m.style.left = left + "px";
+					m.style.top = (top+wrapper.clientHeight - dy) + "px";
+				}else if(is_fullsize){
+					var _left = (left+wrapper.clientWidth/2);
 
-				m.style.fontFamily = window.getComputedStyle(wrapper).fontFamily;
-				m.style.fontStyle = window.getComputedStyle(wrapper).fontStyle;
-				m.style.fontSize = window.getComputedStyle(wrapper).fontSize;
+					if(is_inline)
+						m.style.width = (wrapper.clientWidth+3)+"px";
+					else{
+						var fs = parseFloat(getComputedStyle(m).fontSize);
+						var v_items = Math.round(27.8 * fs / m.children[0].clientHeight);
+
+						var cols = parseInt(m.children.length / v_items) + 1, _cols = cols;
+						var ss = document.body.clientWidth;
+
+						while(true) {
+							var a = _left+(wrapper.clientWidth*cols+3)/2 > ss;
+							var b = _left-(wrapper.clientWidth*cols+3) < 0;
+
+							if(a && b) _left += wrapper.clientWidth;
+							else if(a) cols--;
+							else if(b) _left += wrapper.clientWidth;
+							else break;
+						}
+						m.style.columnCount = cols;
+						m.style.width = (wrapper.clientWidth*cols+3)+"px";
+						m.style.maxHeight = (27.8*fs + (cols!=_cols ? selectjs.scrollsize : 0)) + "px";
+					}
+
+					var _top = (top+wrapper.clientHeight/2 - dy);
+					while(_top-m.clientHeight/2 < 0) _top += 20;
+					if(_top+m.clientWidth/2 < 20) _top += 20;
+					if(_left+m.clientWidth/2+20 > ss) _left -= 20;
+
+					m.style.overflowX = "hidden";
+					m.style.marginLeft = -(m.clientWidth / 2) + "px";
+					m.style.marginTop = -(m.clientHeight / 2) + "px";
+					m.style.left = _left + "px";
+					m.style.top = _top + "px";
+					m.style.overflowX = "auto";
+				}else{
+					m.style.left = left + "px";
+					m.style.top = (top+wrapper.clientHeight - dy) + "px";
+				}
 			}else{
 				if(typeof open=="undefined")
 					open = !wrapper.hasClass("dropdown");
 
 				if(open) wrapper.addClass(!wrapper.hasClass("dropdown") ? "dropdown" : "");
-				else wrapper.removeClass("dropdown");
+				else {
+					wrapper.removeClass("dropdown");
+					return;
+				}
 
 				var current = opts.querySelector(".select-js-option.selected");
 				if(current!=null){
@@ -258,7 +334,7 @@
 				/* Uncomment for material
 				var dy = current.offsetTop - opts.scrollTop;
 				opts.style.marginTop = -(dy+4) + "px";
-				*/
+				// */
 			}
 
 			if(open) {
@@ -353,9 +429,16 @@
 		display.addClass("select-js-display");
 		opts.addClass("select-js-optlist");
 
-		var ops = target.children;
+		var ops = target.children, ow = 0, tfs = 0;
+		!function(x){
+			var y = window.getComputedStyle(x);
+			selectjs.global_opt_test.style.fontSize = y.fontSize;
+			selectjs.global_opt_test.style.fontFamily = y.fontFamily;
+			selectjs.global_opt_test.style.fontWeight = y.fontWeight;
+		}(target);
+
 		for(var i=0; i<ops.length; i++){
-			var opt = document.createElement("div");
+			var opt = document.createElement("div"), test, _s;
 
 			if(ops[i].tagName.toLowerCase()=="option"){
 				opt.addClass("select-js-option " + ops[i].className);
@@ -386,6 +469,15 @@
 					}
 					if(idx>=0) setFocus(idx);
 				});
+
+				test = opt.cloneNode(true);
+				selectjs.global_opt_test.appendChild(test);
+					_s = window.getComputedStyle(test);
+					test.style.fontSize = _s.fontSize;
+					test.style.fontWeight = _s.fontWeight;
+					test.style.fontFamily = _s.fontFamily;
+					ow = Math.max(ow, test.clientWidth);
+				selectjs.global_opt_test.removeChild(test);
 			}else{
 				var grpId = Math.random().toFixed(6).substr(2);
 				opt.innerHTML = ops[i].label;
@@ -427,9 +519,42 @@
 						if(idx>=0) setFocus(idx);
 					});
 					opts.appendChild( opt );
+
+					test = opt.cloneNode(true);
+					selectjs.global_opt_test.appendChild(test);
+						_s = window.getComputedStyle(test);
+						test.style.fontSize = _s.fontSize;
+						test.style.fontWeight = _s.fontWeight;
+						test.style.fontFamily = _s.fontFamily;
+						ow = Math.max(ow, test.clientWidth);
+					selectjs.global_opt_test.removeChild(test);
 				}
 			}
 			opts.appendChild( opt );
+		}
+
+		target.parentNode.insertBefore(wrapper, target);
+		if(editable) {
+			display.value = target.getAttribute("value");
+
+			target.parentNode.removeChild(target);
+			target = display;
+		}
+		else target.style.display = "none";
+
+		wrapper.appendChild(focuser);
+		wrapper.appendChild(target);
+		wrapper.appendChild(display);
+		wrapper.appendChild(opts);
+		if(prev!=null) prev.parentNode.removeChild(prev);
+
+		if(!is_noadjust){
+			wrapper.appendChild(display);
+
+			var s = window.getComputedStyle(display);
+			var pw = parseFloat(s.marginLeft)+parseFloat(s.marginRight)
+				+parseFloat(s.paddingLeft)+parseFloat(s.paddingRight);
+			display.style.minWidth = (pw + ow)+"px";
 		}
 
 		display.addEventListener("click", function(){
@@ -446,15 +571,6 @@
 				}
 			});
 		}
-
-		target.parentNode.insertBefore(wrapper, target);
-		if(editable) {
-			display.value = target.getAttribute("value");
-
-			target.parentNode.removeChild(target);
-			target = display;
-		}
-		else target.style.display = "none";
 
 		focuser.addEventListener("keydown", function(e){
 			if(e.keyCode==38){ // Up
@@ -490,12 +606,6 @@
 		});
 
 		update();
-
-		wrapper.appendChild(focuser);
-		wrapper.appendChild(target);
-		wrapper.appendChild(display);
-		wrapper.appendChild(opts);
-		if(prev!=null) prev.parentNode.removeChild(prev);
 
 		return {
 			lazyfilter: function(data){ update(data) }

@@ -1,6 +1,6 @@
 /*!
  * Select.JS
- * Version: 1.0.22
+ * Version: 1.0.24
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -90,8 +90,8 @@
 	font-weight: 600;
 	font-style: italic;
 }
-.select-js-optlist .select-js-option.select-js-focus { background-color: #e8e8e8 }
-.select-js-optlist .select-js-option:last-child { border-bottom: 0 }
+.select-js-optlist .select-js-option.select-js-focus:hover { background-color: #e8e8e8 }
+.select-js-optlist .select-js-option:last-child { border-bottom-width: 0 }
 
 .select-js.select-js-scroll .select-js-optlist { overflow-y: scroll }
 .select-js.select-js-noscroll .select-js-optlist { overflow-y: hidden }
@@ -135,3 +135,27 @@
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option { display: none }
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-optgroup.select-js-filteredless { display: none }
+
+.select-js-global-optlist.select-js-optlist.select-js-fullsize {
+	margin: 0;
+	column-gap: 9px;
+	column-rule: 1px solid #f4f4f4;
+	border-radius: 3px;
+	overflow-x: auto;
+}
+.select-js-global-optlist.select-js-optlist.select-js-fullsize .select-js-option:last-child { border-bottom-width: 1px }
+.select-js-global-optlist.select-js-optlist.select-js-test {
+	display: block !important;
+	margin: 0;
+	max-height: 28em;
+	right: 1px;
+	bottom: 110%;
+	height: 200px !important;
+	transform: none !important;
+	overflow-x: scroll !important;
+}
+.select-js-global-optlist.select-js-optlist.select-js-test > .select-js-option {
+	float: left;
+	display: inline-block;
+	clear: both;
+}

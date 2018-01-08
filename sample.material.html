@@ -58,7 +58,7 @@ hr {
 	clear: both;
 }
 .text-md { font-size: 18px }
-.input-hg { min-width: 200px }
+.input-hg { min-width: 140px }
 </style>
 </head>
 <body>
@@ -78,6 +78,71 @@ hr {
 		<div class="sector">
 			<h2>No-Options</h2>
 			<select class="text-md input-hg" id="sample_default">
+				<optgroup label="Common">
+					<option value="bounce">Bounce</option>
+					<option value="flash">Flash</option>
+					<option value="pulse">Pulse</option>
+					<option value="rubberBand">Rubber Band</option>
+					<option value="shake">Shake</option>
+					<option value="swing">Swing</option>
+					<option value="tada">Tada</option>
+					<option value="wobble">Wobble</option>
+					<option value="jello">Jello</option>
+					<option value="wiggle">Wiggle</option>
+					<option value="rollIn">Roll In</option>
+				</optgroup>
+				<optgroup label="Bouncing In">
+					<option value="bounceIn">Bounce In</option>
+					<option value="bounceInDown">Bounce In Down</option>
+					<option value="bounceInLeft">Bounce In Left</option>
+					<option value="bounceInRight">Bounce In Right</option>
+					<option value="bounceInUp">Bounce In Up</option>
+				</optgroup>
+				<optgroup label="Fading In">
+					<option value="fadeIn">Fade In</option>
+					<option value="fadeInDown">Fade In Down</option>
+					<option value="fadeInDownBig">Fade In Down Big</option>
+					<option value="fadeInLeft">Fade In Left</option>
+					<option value="fadeInLeftBig">Fade In Left Big</option>
+					<option value="fadeInRight">Fade In Right</option>
+					<option value="fadeInRightBig">Fade In Right Big</option>
+					<option value="fadeInUp">Fade In Up</option>
+					<option value="fadeInUpBig">Fade In Up Big</option>
+				</optgroup>
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+				<optgroup label="Lightspeed">
+					<option value="lightSpeedIn">Light Speed In</option>
+				</optgroup>
+				<optgroup label="Rotating In">
+					<option value="rotateIn">Rotate In</option>
+					<option value="rotateInDownLeft">Rotate In Down Left</option>
+					<option value="rotateInDownRight">Rotate In Down Right</option>
+					<option value="rotateInUpLeft">Rotate In Up Left</option>
+					<option value="rotateInUpRight">Rotate In Up Right</option>
+				</optgroup>
+				<optgroup label="Sliding In">
+					<option value="slideInUp">Slide In Up</option>
+					<option value="slideInDown">Slide In Down</option>
+					<option value="slideInLeft">Slide In Left</option>
+					<option value="slideInRight">Slide In Right</option>
+				</optgroup>
+				<optgroup label="Zoom In">
+					<option value="zoomIn">Zoom In</option>
+					<option value="zoomInDown">Zoom In Down</option>
+					<option value="zoomInLeft">Zoom In Left</option>
+					<option value="zoomInRight">Zoom In Right</option>
+					<option value="zoomInUp">Zoom In Up</option>
+				</optgroup>
+			</select>
+		</div>
+		<div class="sector">
+			<code>select-js-noadjust</code>
+			<h2>No adjust sizing</h2>
+			<select class="text-md input-hg select-js-noadjust" id="sample_noadjust">
 				<optgroup label="Common">
 					<option value="bounce">Bounce</option>
 					<option value="flash">Flash</option>
@@ -358,6 +423,73 @@ hr {
 					<option value="flip">Flip</option>
 					<option value="flipInX">Flip In X</option>
 					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+			</select>
+		</div>
+		<div class="sector">
+			<code>select-js-fullsize</code>
+			<h2>Fullsize droplist (Global forced)</h2>
+
+			<select class="text-md input-hg select-js-fullsize" id="sample_fullsize">
+				<optgroup label="Common">
+					<option value="bounce">Bounce</option>
+					<option value="flash">Flash</option>
+					<option value="pulse">Pulse</option>
+					<option value="rubberBand">Rubber Band</option>
+					<option value="shake">Shake</option>
+					<option value="swing">Swing</option>
+					<option value="tada">Tada</option>
+					<option value="wobble">Wobble</option>
+					<option value="jello">Jello</option>
+					<option value="wiggle">Wiggle</option>
+					<option value="rollIn">Roll In</option>
+					<option value="rollIn">Roll In</option>
+				</optgroup>
+				<optgroup label="Bouncing In">
+					<option value="bounceIn">Bounce In</option>
+					<option value="bounceInDown">Bounce In Down</option>
+					<option value="bounceInLeft">Bounce In Left</option>
+					<option value="bounceInRight">Bounce In Right</option>
+					<option value="bounceInUp">Bounce In Up</option>
+				</optgroup>
+				<optgroup label="Fading In">
+					<option value="fadeIn">Fade In</option>
+					<option value="fadeInDown">Fade In Down</option>
+					<option value="fadeInDownBig">Fade In Down Big</option>
+					<option value="fadeInLeft">Fade In Left</option>
+					<option value="fadeInLeftBig">Fade In Left Big</option>
+					<option value="fadeInRight">Fade In Right</option>
+					<option value="fadeInRightBig">Fade In Right Big</option>
+					<option value="fadeInUp">Fade In Up</option>
+					<option value="fadeInUpBig">Fade In Up Big</option>
+				</optgroup>
+				<optgroup label="Flippers">
+					<option value="flip">Flip</option>
+					<option value="flipInX">Flip In X</option>
+					<option value="flipInY">Flip In Y</option>
+				</optgroup>
+				<optgroup label="Lightspeed">
+					<option value="lightSpeedIn">Light Speed In</option>
+				</optgroup>
+				<optgroup label="Rotating In">
+					<option value="rotateIn">Rotate In</option>
+					<option value="rotateInDownLeft">Rotate In Down Left</option>
+					<option value="rotateInDownRight">Rotate In Down Right</option>
+					<option value="rotateInUpLeft">Rotate In Up Left</option>
+					<option value="rotateInUpRight">Rotate In Up Right</option>
+				</optgroup>
+				<optgroup label="Sliding In">
+					<option value="slideInUp">Slide In Up</option>
+					<option value="slideInDown">Slide In Down</option>
+					<option value="slideInLeft">Slide In Left</option>
+					<option value="slideInRight">Slide In Right</option>
+				</optgroup>
+				<optgroup label="Zoom In">
+					<option value="zoomIn">Zoom In</option>
+					<option value="zoomInDown">Zoom In Down</option>
+					<option value="zoomInLeft">Zoom In Left</option>
+					<option value="zoomInRight">Zoom In Right</option>
+					<option value="zoomInUp">Zoom In Up</option>
 				</optgroup>
 			</select>
 		</div>

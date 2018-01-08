@@ -24,6 +24,8 @@ select-js-editable | Droplist will be changed to text input element. Caution! Ca
 select-js-autofilter | Options will be filtered automatically by input value. `Editable only.`
 select-js-customfilter | Options will be filtered (or display something new) by user function. `Editable only.`
 select-js-global | Droplist will share list element, and it added to body dom element.
+select-js-fullsize | Same with select-js-global, but it expend to display all element. (Smaller than screen)
+select-js-noadjust | Select element will not adjusted automatically.
 
 On `select-js-editable`, you can use some attributes for design.
 

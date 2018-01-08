@@ -1,6 +1,6 @@
 /*!
  * Select.JS Material
- * Version: 1.0.22
+ * Version: 1.0.24
  *
  * Copyright 2017 Wolfgang Kurz
  * Released under the MIT license
@@ -79,16 +79,18 @@
 .select-js-optlist .select-js-option, .select-js-optlist .select-js-optgroup {
 	display: block;
 	padding: 0 0.5rem;
+	border-top: 1px solid transparent;
 }
 .select-js-optlist .select-js-option.select-js-indent { padding-left: 1.5rem }
 .select-js-optlist .select-js-option.selected { background-color:#f6f6f6 }
 .select-js-optlist .select-js-optgroup { font-weight: 600 }
 
 .select-js-optlist .select-js-optgroup + .select-js-optgroup,
-.select-js-optlist .select-js-option + .select-js-optgroup { border-top: 1px solid #dcdcdc }
+.select-js-optlist .select-js-option + .select-js-optgroup,
+.select-js-optlist .select-js-option.select-js-indent + .select-js-option:not(.select-js-indent) { border-top-color: #dcdcdc }
 
 .select-js-optlist .select-js-option.select-js-focus:hover { background-color: #e8e8e8 }
-.select-js-optlist .select-js-option:last-child { border-bottom: 0 }
+.select-js-optlist .select-js-option:last-child { border-bottom-color: transparent }
 
 .select-js.select-js-scroll .select-js-optlist { overflow-y: scroll }
 .select-js.select-js-noscroll .select-js-optlist { overflow-y: hidden }
@@ -123,3 +125,28 @@
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option { display: none }
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-option.select-js-filtered { display: block }
 .select-js.select-js-editable.select-js-customfilter .select-js-optlist .select-js-optgroup.select-js-filteredless { display: none }
+
+.select-js-global-optlist.select-js-optlist.select-js-fullsize {
+	margin: 0;
+	column-gap: 0;
+	column-rule: none;
+	border-radius: 3px;
+	overflow-x: auto;
+	transform: scale(0.9, 0.9);
+}
+.select-js-global-optlist.select-js-optlist.select-js-fullsize.dropdown { transform: scale(1, 1) }
+.select-js-global-optlist.select-js-optlist.select-js-test {
+	display: block !important;
+	margin: 0;
+	max-height: 28em;
+	right: 1px;
+	bottom: 110%;
+	height: 200px !important;
+	transform: none !important;
+	overflow-x: scroll !important;
+}
+.select-js-global-optlist.select-js-optlist.select-js-test > .select-js-option {
+	float: left;
+	display: inline-block;
+	clear: both;
+}
