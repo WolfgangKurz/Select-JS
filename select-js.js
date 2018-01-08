@@ -288,7 +288,7 @@
 
 						while(true) {
 							var a = _left+(wrapper.clientWidth*cols+3)/2 > ss;
-							var b = _left-(wrapper.clientWidth*cols+3) < 0;
+							var b = _left-(wrapper.clientWidth*cols+3)/2 < 0;
 
 							if(a && b) _left += wrapper.clientWidth;
 							else if(a) cols--;
@@ -301,7 +301,7 @@
 					}
 
 					var _top = (top+wrapper.clientHeight/2 - dy);
-					while(_top-m.clientHeight/2 < 0) _top += 20;
+					while(_top-m.clientHeight/2 < 10) _top += 20;
 					if(_top+m.clientWidth/2 < 20) _top += 20;
 					if(_left+m.clientWidth/2+20 > ss) _left -= 20;
 
@@ -554,7 +554,7 @@
 			var s = window.getComputedStyle(display);
 			var pw = parseFloat(s.marginLeft)+parseFloat(s.marginRight)
 				+parseFloat(s.paddingLeft)+parseFloat(s.paddingRight);
-			display.style.minWidth = (pw + ow)+"px";
+			display.style.minWidth = (pw + ow + selectjs.scrollsize)+"px";
 		}
 
 		display.addEventListener("click", function(){
